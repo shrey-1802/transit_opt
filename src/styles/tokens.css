@@ -1,0 +1,143 @@
+:root {
+  /* Color Palette - Sophisticated Olive Green & Elegant Beige */
+  --color-olive-50: #F4F6F3;
+  --color-olive-100: #E4EAE2;
+  --color-olive-200: #C9D6C5;
+  --color-olive-300: #A8BDA2;
+  --color-olive-400: #7A9772;
+  --color-olive-500: #55724D;
+  --color-olive-600: #3F5739;
+  --color-olive-700: #2F422A; /* Primary Olive CTA */
+  --color-olive-800: #233120;
+  --color-olive-900: #172115;
+  --color-olive-950: #0E150D;
+
+  --color-beige-50: #FAF8F5;
+  --color-beige-100: #F3EFE9;
+  --color-beige-200: #E7DFD4;
+  --color-beige-300: #D8CBBA;
+  --color-beige-400: #C4B29C;
+  --color-beige-500: #AB977E;
+  --color-beige-600: #8E7A63;
+  --color-beige-700: #73614E;
+  --color-beige-800: #5A4C3D;
+  --color-beige-900: #42382D;
+
+  /* Restrained semantic status tokens (no harsh neon colors) */
+  --status-available-bg: rgba(63, 87, 57, 0.12);
+  --status-available-text: #2F422A;
+  --status-available-border: rgba(63, 87, 57, 0.25);
+
+  --status-ontrip-bg: rgba(171, 151, 126, 0.15);
+  --status-ontrip-text: #6A5640;
+  --status-ontrip-border: rgba(171, 151, 126, 0.3);
+
+  --status-inshop-bg: rgba(196, 120, 40, 0.12);
+  --status-inshop-text: #8E5214;
+  --status-inshop-border: rgba(196, 120, 40, 0.28);
+
+  --status-retired-bg: rgba(120, 120, 120, 0.12);
+  --status-retired-text: #595959;
+  --status-retired-border: rgba(120, 120, 120, 0.25);
+
+  --status-critical-bg: rgba(168, 50, 40, 0.1);
+  --status-critical-text: #962B22;
+  --status-critical-border: rgba(168, 50, 40, 0.22);
+
+  --status-warning-bg: rgba(184, 134, 11, 0.12);
+  --status-warning-text: #825E03;
+  --status-warning-border: rgba(184, 134, 11, 0.25);
+
+  /* Light Mode Theme Defaults */
+  --bg-app: #F7F5F0;           /* Warm soft beige-tinted canvas */
+  --bg-surface: #FFFFFF;       /* Pure white crisp card */
+  --bg-surface-elevated: #FFFFFF;
+  --bg-surface-hover: #F2EFE8;
+  --bg-sidebar: #ECE7DD;       /* Structural warm beige sidebar */
+  --bg-header: rgba(247, 245, 240, 0.85);
+
+  --border-subtle: #E2DBD0;
+  --border-medium: #D1C6B6;
+  --border-focus: #3F5739;
+
+  --text-primary: #1C231B;     /* Deep dark charcoal olive */
+  --text-secondary: #586455;   /* Balanced muted olive text */
+  --text-muted: #849080;       /* Soft caption */
+  --text-inverse: #FFFFFF;
+
+  --primary: #2F422A;
+  --primary-hover: #233120;
+  --primary-fg: #FFFFFF;
+
+  --accent: #D8CBBA;
+  --accent-fg: #2F422A;
+
+  --shadow-sm: 0 1px 2px 0 rgba(28, 35, 27, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(28, 35, 27, 0.06), 0 2px 4px -1px rgba(28, 35, 27, 0.03);
+  --shadow-lg: 0 12px 24px -4px rgba(28, 35, 27, 0.08), 0 4px 6px -2px rgba(28, 35, 27, 0.04);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark Mode Theme */
+[data-theme='dark'] {
+  --bg-app: #121612;           /* Deep Charcoal with olive undertone */
+  --bg-surface: #181E18;       /* Charcoal Olive Card */
+  --bg-surface-elevated: #1F271F;
+  --bg-surface-hover: #263126;
+  --bg-sidebar: #151B15;       /* Sleek structural dark olive sidebar */
+  --bg-header: rgba(18, 22, 18, 0.88);
+
+  --border-subtle: #242D24;
+  --border-medium: #323E32;
+  --border-focus: #7A9772;
+
+  --text-primary: #EDE8DE;     /* Warm beige typography */
+  --text-secondary: #B0BDB0;   /* Muted sage */
+  --text-muted: #748274;       /* Darker caption */
+  --text-inverse: #121612;
+
+  --primary: #4A6544;
+  --primary-hover: #5A7B53;
+  --primary-fg: #F7F5F0;
+
+  --accent: #3E3224;
+  --accent-fg: #E7DFD4;
+
+  --status-available-bg: rgba(74, 101, 68, 0.22);
+  --status-available-text: #B4D1AF;
+  --status-available-border: rgba(122, 151, 114, 0.35);
+
+  --status-ontrip-bg: rgba(216, 203, 186, 0.14);
+  --status-ontrip-text: #D8CBBA;
+  --status-ontrip-border: rgba(216, 203, 186, 0.25);
+
+  --status-inshop-bg: rgba(212, 140, 60, 0.18);
+  --status-inshop-text: #E8A86B;
+  --status-inshop-border: rgba(212, 140, 60, 0.32);
+
+  --status-retired-bg: rgba(140, 140, 140, 0.18);
+  --status-retired-text: #A6A6A6;
+  --status-retired-border: rgba(140, 140, 140, 0.28);
+
+  --status-critical-bg: rgba(217, 83, 79, 0.2);
+  --status-critical-text: #F2928E;
+  --status-critical-border: rgba(217, 83, 79, 0.35);
+
+  --status-warning-bg: rgba(230, 175, 46, 0.18);
+  --status-warning-text: #F5CE77;
+  --status-warning-border: rgba(230, 175, 46, 0.32);
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+}
