@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const activeRole: UserRole = user?.role || 'fleet_manager';
   const permissions: RolePermission = ROLE_PERMISSIONS[activeRole];
 
-  const login = async (email: string, password?: string, role: UserRole = 'fleet_manager') => {
+  const login = async (email: string, password?: string, role?: UserRole) => {
     setIsLoading(true);
     try {
       const session = await authService.login(email, password, role);

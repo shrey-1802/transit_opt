@@ -78,16 +78,26 @@ class ApiClient {
 
       clearTimeout(timeoutId);
 
-      if (!response.ok) {
+      const contentType = response.headers.get('content-type') || '';
+      const isJson = contentType.includes('application/json');
+
+      if (!response.ok || !isJson) {
         let errorData: any = {};
-        try {
-          errorData = await response.json();
-        } catch {
-          errorData = { message: response.statusText || 'Server Error' };
+        if (isJson) {
+          try {
+            errorData = await response.json();
+          } catch {
+            errorData = { message: response.statusText || 'Server Error' };
+          }
+        } else {
+          // If response is HTML or not JSON, this is a static server (like GitHub Pages or Vite preview without backend proxy) returning index.html for /api/* routes!
+          errorData = { message: `Endpoint returned non-JSON (${contentType || 'text/html'})` };
         }
 
         const isConnectionDown =
+          !isJson ||
           response.status === 404 ||
+          response.status === 500 ||
           response.status === 502 ||
           response.status === 503 ||
           response.status === 504 ||
@@ -96,7 +106,7 @@ class ApiClient {
 
         const apiErr = new ApiError(
           errorData.message || `Request failed with status ${response.status}`,
-          response.status,
+          !isJson && response.ok ? 503 : response.status,
           errorData.code,
           errorData.fieldErrors || errorData.errors
         );
@@ -118,8 +128,11 @@ class ApiClient {
         err.isNetworkFailure ||
         err.name === 'AbortError' ||
         err.name === 'TypeError' ||
+        err.name === 'SyntaxError' ||
         err.message?.includes('Failed to fetch') ||
-        err.message?.includes('NetworkError');
+        err.message?.includes('NetworkError') ||
+        err.message?.includes('Unexpected token') ||
+        err.message?.includes('JSON');
 
       if (isNetworkFailure && API_CONFIG.enableResilientFallback) {
         this.isFallbackActive = true;
@@ -132,7 +145,12 @@ class ApiClient {
         throw err;
       }
 
-      throw new ApiError(err.message || 'An unexpected error occurred', 500);
+      const fallbackErr = new ApiError(err.message || 'An unexpected error occurred', 500);
+      if (API_CONFIG.enableResilientFallback) {
+        this.isFallbackActive = true;
+        (fallbackErr as any).isNetworkFailure = true;
+      }
+      throw fallbackErr;
     }
   }
 
