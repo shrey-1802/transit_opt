@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   // "fleet_manager" | "dispatcher" | "safety_officer" | "financial_analyst"
+  department   String?
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+model Vehicle {
+  id                  String   @id @default(uuid())
+  registrationNumber  String   @unique
+  model               String
+  type                String   // "Heavy Truck" | "Semi-Trailer" | "Van" | "Flatbed" | "Tanker"
+  maxLoadCapacity     Float    // in kg
+  odometer            Float    // in km
+  acquisitionCost     Float    // in USD
+  status              String   @default("Available") // "Available" | "On Trip" | "In Shop" | "Retired"
+  lifecycleState      String   @default("Available") // "Purchased" | "Available" | "Assigned" | "On Trip" | "Maintenance" | "Retired"
+  healthScore         Float    @default(100)         // 0 - 100
+  fuelEfficiency      Float    @default(3.5)         // km/L
+  lastServiceOdometer Float    @default(0)
+  serviceIntervalKm   Float    @default(20000)
+  region              String   @default("Central Hub")
+  year                Int      @default(2024)
+  assignedDriverId    String?
+  assignedDriverName  String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  documents           VehicleDocument[]
+  maintenanceLogs     MaintenanceLog[]
+  fuelLogs            FuelLog[]
+  expenses            Expense[]
+  trips               Trip[]
+
+  @@index([registrationNumber])
+  @@index([status])
+  @@index([type])
+  @@index([region])
+}
+
+model Driver {
+  id                String   @id @default(uuid())
+  name              String
+  licenseNumber     String   @unique
+  licenseCategory   String   // "Class A (CDL)" | "Class B (Heavy)" | "Class C (Standard)"
+  licenseExpiryDate String   // ISO YYYY-MM-DD
+  contactNumber     String
+  email             String
+  status            String   @default("Available") // "Available" | "On Trip" | "Off Duty" | "Suspended"
+  safetyScore       Float    @default(95)          // 0 - 100
+  tripsCompleted    Int      @default(0)
+  violationCount    Int      @default(0)
+  performanceScore  Float    @default(95)
+  assignedVehicleId String?
+  assignedVehicleReg String?
+  suspendedReason   String?
+  joinedDate        String   @default("2023-01-01")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  trips             Trip[]
+  fuelLogs          FuelLog[]
+
+  @@index([licenseNumber])
+  @@index([status])
+  @@index([licenseExpiryDate])
+}
+
+model Trip {
+  id                 String    @id @default(uuid())
+  tripCode           String    @unique
+  source             String
+  destination        String
+  vehicleId          String
+  vehicleReg         String
+  driverId           String
+  driverName         String
+  cargoDescription   String
+  cargoWeightKg      Float
+  plannedDistanceKm  Float
+  actualDistanceKm   Float?
+  startOdometer      Float
+  finalOdometer      Float?
+  fuelConsumedLiters Float?
+  revenue            Float     @default(0)
+  status             String    @default("Draft") // "Draft" | "Dispatched" | "In Progress" | "Completed" | "Cancelled"
+  cancellationReason String?
+  dispatchedAt       DateTime?
+  completedAt        DateTime?
+  cancelledAt        DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  vehicle            Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  driver             Driver    @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  expenses           Expense[]
+
+  @@index([tripCode])
+  @@index([status])
+  @@index([vehicleId])
+  @@index([driverId])
+}
+
+model MaintenanceLog {
+  id                String    @id @default(uuid())
+  vehicleId         String
+  vehicleReg        String
+  type              String
+  priority          String    @default("Routine") // "Routine" | "Preventive" | "Corrective" | "Emergency" | "High"
+  description       String?
+  startDate         DateTime  @default(now())
+  completionDate    DateTime?
+  cost              Float     @default(0)
+  odometerAtService Float     @default(0)
+  status            String    @default("In Progress") // "Scheduled" | "In Progress" | "Completed" | "Cancelled"
+  technicianOrShop  String    @default("Central Maintenance Bay")
+  partsReplaced     String?   // JSON array string
+  notes             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  vehicle           Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId])
+  @@index([status])
+  @@index([priority])
+}
+
+model FuelLog {
+  id                    String   @id @default(uuid())
+  vehicleId             String
+  vehicleReg            String
+  driverId              String?
+  driverName            String?
+  date                  String   // YYYY-MM-DD
+  liters                Float
+  costPerLiter          Float
+  totalCost             Float
+  odometer              Float
+  distanceSinceLastFill Float
+  fuelEfficiencyKmPerL  Float
+  isAbnormalConsumption Boolean  @default(false)
+  stationName           String
+  notes                 String?
+  createdAt             DateTime @default(now())
+
+  vehicle               Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  driver                Driver?  @relation(fields: [driverId], references: [id], onDelete: SetNull)
+
+  @@index([vehicleId])
+  @@index([date])
+  @@index([isAbnormalConsumption])
+}
+
+model Expense {
+  id            String   @id @default(uuid())
+  category      String   // "Fuel" | "Maintenance" | "Toll" | "Permit & Licensing" | "Insurance" | "Driver Allowance" | "Miscellaneous"
+  vehicleId     String?
+  vehicleReg    String?
+  tripId        String?
+  amount        Float
+  date          String   // YYYY-MM-DD
+  description   String
+  receiptNumber String?
+  createdBy     String   @default("Finance Ops")
+  createdAt     DateTime @default(now())
+
+  vehicle       Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  trip          Trip?    @relation(fields: [tripId], references: [id], onDelete: SetNull)
+
+  @@index([category])
+  @@index([vehicleId])
+  @@index([tripId])
+}
+
+model VehicleDocument {
+  id        String   @id @default(uuid())
+  vehicleId String
+  name      String
+  type      String   // "Insurance" | "Registration" | "Emission Test" | "Road Tax" | "Inspection Certificate"
+  fileUrl   String
+  fileSize  String
+  expiresAt String
+  status    String   @default("Valid")
+  createdAt DateTime @default(now())
+
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId])
+}
+
+model Alert {
+  id                String   @id @default(uuid())
+  type              String   // "license_expiry" | "vehicle_service_due" | "maintenance_overdue" | "abnormal_fuel_cost" | "suspended_driver_attempt" | "overloaded_cargo_attempt"
+  severity          String   // "critical" | "warning" | "info"
+  title             String
+  description       String
+  timestamp         DateTime @default(now())
+  isRead            Boolean  @default(false)
+  relatedEntityType String?
+  relatedEntityId   String?
+  actionUrl         String?
+  actionLabel       String?
+  createdAt         DateTime @default(now())
+
+  @@index([severity])
+  @@index([isRead])
+  @@index([type])
+}
