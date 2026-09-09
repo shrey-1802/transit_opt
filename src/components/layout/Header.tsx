@@ -55,66 +55,40 @@ export const Header: React.FC = () => {
 
       {/* Right side controls */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-        {/* Quick RBAC Role Previewer */}
-        <div style={{ position: 'relative' }}>
-          <button
-            onClick={() => setShowRoleMenu(prev => !prev)}
-            className="btn btn-secondary"
-            style={{
-              padding: '0.35rem 0.75rem',
-              fontSize: '0.8rem',
-              gap: '0.4rem',
-              borderRadius: 'var(--radius-md)',
-            }}
-          >
-            <span style={{ color: 'var(--text-muted)' }}>Role:</span>
-            <span style={{ fontWeight: 700 }}>{ROLE_LABELS[activeRole]}</span>
-            <ChevronDown size={14} />
-          </button>
-
-          {showRoleMenu && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '110%',
-                right: 0,
-                backgroundColor: 'var(--bg-surface)',
-                border: '1px solid var(--border-medium)',
-                borderRadius: 'var(--radius-md)',
-                boxShadow: 'var(--shadow-lg)',
-                padding: '0.4rem',
-                minWidth: '210px',
-                zIndex: 100,
-              }}
-            >
-              <div style={{ padding: '0.4rem 0.6rem', fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>
-                Preview As Role
-              </div>
-              {roles.map(r => (
-                <button
-                  key={r}
-                  onClick={() => {
-                    switchRole(r);
-                    setShowRoleMenu(false);
-                  }}
-                  style={{
-                    width: '100%',
-                    textAlign: 'left',
-                    padding: '0.45rem 0.65rem',
-                    fontSize: '0.82rem',
-                    borderRadius: 'var(--radius-sm)',
-                    backgroundColor: activeRole === r ? 'var(--color-olive-100)' : 'transparent',
-                    color: activeRole === r ? 'var(--color-olive-900)' : 'var(--text-primary)',
-                    fontWeight: activeRole === r ? 700 : 500,
-                    display: 'block',
-                  }}
-                >
-                  {ROLE_LABELS[r]}
-                </button>
-              ))}
-            </div>
-          )}
+        {/* Active Clearance Badge */}
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '0.35rem 0.8rem',
+            borderRadius: 'var(--radius-full)',
+            backgroundColor: 'var(--color-olive-100)',
+            border: '1px solid var(--color-olive-300)',
+            fontSize: '0.78rem',
+            color: 'var(--color-olive-900)',
+            fontWeight: 700,
+          }}
+        >
+          <span style={{ color: 'var(--color-olive-700)' }}>Clearance:</span>
+          <span>{ROLE_LABELS[activeRole]}</span>
         </div>
+
+        {/* Switch Role / Logout Button */}
+        <button
+          onClick={logout}
+          className="btn btn-secondary"
+          style={{
+            padding: '0.35rem 0.75rem',
+            fontSize: '0.78rem',
+            gap: '0.4rem',
+            borderRadius: 'var(--radius-md)',
+          }}
+          title="Sign out of current role to select another operational clearance on the landing gateway"
+        >
+          <LogOut size={14} />
+          <span>Switch Role / Sign Out</span>
+        </button>
 
         {/* Theme Toggle */}
         <button
@@ -167,7 +141,7 @@ export const Header: React.FC = () => {
           />
         </NavLink>
 
-        {/* User Info & Logout */}
+        {/* User Avatar */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginLeft: '0.25rem' }}>
           <div
             style={{
@@ -190,19 +164,6 @@ export const Header: React.FC = () => {
               {user?.name || 'Operator'}
             </div>
           </div>
-          <button
-            onClick={logout}
-            style={{
-              padding: '0.4rem',
-              color: 'var(--text-muted)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            title="Sign Out"
-          >
-            <LogOut size={17} />
-          </button>
         </div>
       </div>
     </header>

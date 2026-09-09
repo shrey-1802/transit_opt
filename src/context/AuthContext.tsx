@@ -27,11 +27,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (currentUser) {
           setUser(currentUser);
         } else {
-          // Provide default authenticated fleet manager for seamless demo/production test
-          setUser(authService.getPresetUser('fleet_manager'));
+          setUser(null);
         }
       } catch {
-        setUser(authService.getPresetUser('fleet_manager'));
+        setUser(null);
       } finally {
         setIsLoading(false);
       }

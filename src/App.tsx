@@ -6,7 +6,7 @@ import { AuthProvider } from './context/AuthContext';
 import { AppShell } from './components/layout/AppShell';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
-import { LoginPage } from './pages/auth/LoginPage';
+import { LandingPage } from './pages/landing/LandingPage';
 import { ForbiddenPage } from './pages/auth/ForbiddenPage';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { VehicleRegistryPage } from './pages/vehicles/VehicleRegistryPage';
@@ -26,8 +26,9 @@ export const App: React.FC = () => {
         <ToastProvider>
           <AuthProvider>
             <Routes>
-              {/* Public Routes */}
-              <Route path="/login" element={<LoginPage />} />
+              {/* Public Animated Landing & Role Clearance Gateway */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LandingPage />} />
               <Route path="/403" element={<ForbiddenPage />} />
 
               {/* Protected Operations Shell */}
@@ -58,8 +59,7 @@ export const App: React.FC = () => {
               </Route>
 
               {/* Default Redirects */}
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </AuthProvider>
         </ToastProvider>
