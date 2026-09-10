@@ -12,8 +12,8 @@ export const LoginPage: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { showToast } = useToast();
 
-  const [email, setEmail] = useState('eleanor.vance@transitops.internal');
-  const [password, setPassword] = useState('••••••••••••');
+  const [email, setEmail] = useState('admin@transitops.internal');
+  const [password, setPassword] = useState('Admin@Transit2026!');
   const [selectedRole, setSelectedRole] = useState<UserRole>('fleet_manager');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -47,9 +47,9 @@ export const LoginPage: React.FC = () => {
   const presetRoles: { role: UserRole; title: string; email: string; desc: string }[] = [
     {
       role: 'fleet_manager',
-      title: 'Fleet Manager',
-      email: 'eleanor.vance@transitops.internal',
-      desc: 'Vehicle registry, digital twin, maintenance schedules, fleet analytics',
+      title: 'Fleet Manager (Admin)',
+      email: 'admin@transitops.internal',
+      desc: 'Full system access: vehicles, dispatch, drivers, maintenance, fuel, reports & analytics',
     },
     {
       role: 'dispatcher',

@@ -47,15 +47,15 @@ apiV1Router.post('/vehicles/:id/documents', authMiddleware, requireRoles('fleet_
 apiV1Router.get('/drivers', driverController.getAll);
 apiV1Router.get('/drivers/:id', driverController.getById);
 apiV1Router.post('/drivers', authMiddleware, requireRoles('safety_officer', 'fleet_manager'), validateBody(createDriverSchema), driverController.create);
-apiV1Router.post('/drivers/:id/suspend', authMiddleware, requireRoles('safety_officer'), validateBody(suspendDriverSchema), driverController.suspend);
-apiV1Router.post('/drivers/:id/reinstate', authMiddleware, requireRoles('safety_officer'), driverController.reinstate);
+apiV1Router.post('/drivers/:id/suspend', authMiddleware, requireRoles('safety_officer', 'fleet_manager'), validateBody(suspendDriverSchema), driverController.suspend);
+apiV1Router.post('/drivers/:id/reinstate', authMiddleware, requireRoles('safety_officer', 'fleet_manager'), driverController.reinstate);
 
 // Trips & Smart Dispatch (Dispatcher controls)
 apiV1Router.get('/trips', tripController.getAll);
 apiV1Router.post('/trips/validate-dispatch', validateBody(validateDispatchSchema), tripController.validateDispatch);
-apiV1Router.post('/trips/dispatch', authMiddleware, requireRoles('dispatcher'), validateBody(dispatchTripSchema), tripController.dispatch);
-apiV1Router.post('/trips/:id/complete', authMiddleware, requireRoles('dispatcher'), validateBody(completeTripSchema), tripController.complete);
-apiV1Router.post('/trips/:id/cancel', authMiddleware, requireRoles('dispatcher'), validateBody(cancelTripSchema), tripController.cancel);
+apiV1Router.post('/trips/dispatch', authMiddleware, requireRoles('dispatcher', 'fleet_manager'), validateBody(dispatchTripSchema), tripController.dispatch);
+apiV1Router.post('/trips/:id/complete', authMiddleware, requireRoles('dispatcher', 'fleet_manager'), validateBody(completeTripSchema), tripController.complete);
+apiV1Router.post('/trips/:id/cancel', authMiddleware, requireRoles('dispatcher', 'fleet_manager'), validateBody(cancelTripSchema), tripController.cancel);
 
 // Maintenance (Fleet Manager)
 apiV1Router.get('/maintenance', maintenanceController.getAll);
@@ -67,7 +67,7 @@ apiV1Router.get('/fuel', fuelController.getAll);
 apiV1Router.post('/fuel', authMiddleware, requireRoles('financial_analyst', 'fleet_manager'), validateBody(logFuelSchema), fuelController.logFuel);
 apiV1Router.get('/expenses', fuelController.getExpenses);
 apiV1Router.get('/expenses/summary', fuelController.getCostSummary);
-apiV1Router.post('/expenses', authMiddleware, requireRoles('financial_analyst'), validateBody(logExpenseSchema), fuelController.logExpense);
+apiV1Router.post('/expenses', authMiddleware, requireRoles('financial_analyst', 'fleet_manager'), validateBody(logExpenseSchema), fuelController.logExpense);
 
 // Analytics & Reports
 apiV1Router.get('/analytics/dashboard-kpis', analyticsController.getDashboardKPIs);

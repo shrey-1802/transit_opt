@@ -6,7 +6,7 @@ const PRESET_USERS: Record<UserRole, User> = {
   fleet_manager: {
     id: 'usr-1',
     name: 'Eleanor Vance',
-    email: 'eleanor.vance@transitops.internal',
+    email: 'admin@transitops.internal',
     role: 'fleet_manager',
     department: 'Fleet & Asset Operations',
   },
@@ -35,14 +35,14 @@ const PRESET_USERS: Record<UserRole, User> = {
 
 // Email → role mapping for client-side resolution
 const EMAIL_ROLE_MAP: Record<string, UserRole> = {
-  'eleanor.vance@transitops.internal': 'fleet_manager',
+  'admin@transitops.internal': 'fleet_manager',
   'carlos.mendez@transitops.internal': 'dispatcher',
   'raymond.holt@transitops.internal': 'safety_officer',
   'siddharth.n@transitops.internal': 'financial_analyst',
 };
 
 // Accepted demo passwords — any of these unlock any registered operator account
-const VALID_DEMO_PASSWORDS = ['password123', 'admin123', 'TransitOps2026!'];
+const VALID_DEMO_PASSWORDS = ['Admin@Transit2026!', 'TransitOps2026!'];
 
 function resolveRoleFromEmail(email: string): UserRole {
   return EMAIL_ROLE_MAP[email.toLowerCase()] ?? 'fleet_manager';

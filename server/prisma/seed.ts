@@ -7,11 +7,12 @@ async function main() {
   console.log('🌱 Seeding TransitOps Production Database...');
 
   // 1. Seed Users for all 4 RBAC Roles
-  const passwordHash = await bcrypt.hash('TransitOps2026!', 10);
+  const passwordHash = await bcrypt.hash('Admin@Transit2026!', 10);
+  const otherPasswordHash = await bcrypt.hash('TransitOps2026!', 10);
 
   const users = [
     {
-      email: 'eleanor.vance@transitops.internal',
+      email: 'admin@transitops.internal',
       name: 'Eleanor Vance',
       role: 'fleet_manager',
       department: 'Fleet & Asset Operations',
@@ -22,21 +23,21 @@ async function main() {
       name: 'Carlos Mendez',
       role: 'dispatcher',
       department: 'Logistics Control Center',
-      passwordHash,
+      passwordHash: otherPasswordHash,
     },
     {
       email: 'raymond.holt@transitops.internal',
       name: 'Captain Raymond Holt',
       role: 'safety_officer',
       department: 'Compliance & Safety Directorate',
-      passwordHash,
+      passwordHash: otherPasswordHash,
     },
     {
       email: 'siddharth.n@transitops.internal',
       name: 'Siddharth Nair',
       role: 'financial_analyst',
       department: 'Capital & Operating Financial Analytics',
-      passwordHash,
+      passwordHash: otherPasswordHash,
     },
   ];
 
