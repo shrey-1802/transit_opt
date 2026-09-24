@@ -9,7 +9,7 @@ import {
   UserCheck,
   Package,
   MapPin,
-  DollarSign,
+  IndianRupee,
   Play,
   RotateCcw,
   ShieldAlert
@@ -24,6 +24,7 @@ import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { formatNumber, formatINR } from '../../utils/formatters';
 
 export const SmartDispatchPage: React.FC = () => {
   const { can } = useAuth();
@@ -252,7 +253,7 @@ export const SmartDispatchPage: React.FC = () => {
                   const isBlocked = v.status !== 'Available';
                   return (
                     <option key={v.id} value={v.id}>
-                      {v.registrationNumber} — {v.model} ({v.type}) [Max {v.maxLoadCapacity.toLocaleString()} kg] — {v.status} {isBlocked ? `[BLOCKED: ${v.status}]` : '[ELIGIBLE]'}
+                      {v.registrationNumber} — {v.model} ({v.type}) [Max {formatNumber(v.maxLoadCapacity)} kg] — {v.status} {isBlocked ? `[BLOCKED: ${v.status}]` : '[ELIGIBLE]'}
                     </option>
                   );
                 })}
@@ -308,7 +309,7 @@ export const SmartDispatchPage: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Trip Revenue ($)</label>
+                <label className="form-label">Trip Revenue (₹)</label>
                 <input
                   type="number"
                   className="form-control"
@@ -377,8 +378,8 @@ export const SmartDispatchPage: React.FC = () => {
                     <XCircle size={16} color="var(--status-critical-text)" />
                   )}
                   <span>
-                    Cargo ({formData.cargoWeightKg.toLocaleString()} kg) $\le$ Max Capacity (
-                    {selectedVehicle ? `${selectedVehicle.maxLoadCapacity.toLocaleString()} kg` : '—'})
+                    Cargo ({formatNumber(formData.cargoWeightKg)} kg) ≤ Max Capacity (
+                    {selectedVehicle ? `${formatNumber(selectedVehicle.maxLoadCapacity)} kg` : '—'})
                   </span>
                 </div>
               </div>
@@ -502,8 +503,8 @@ export const SmartDispatchPage: React.FC = () => {
                       <span style={{ fontWeight: 600, color: 'var(--color-olive-700)' }}>{trip.vehicleReg}</span>
                     </td>
                     <td>{trip.driverName}</td>
-                    <td>{trip.cargoWeightKg.toLocaleString()} kg</td>
-                    <td>${trip.revenue.toLocaleString()}</td>
+                    <td>{formatNumber(trip.cargoWeightKg)} kg</td>
+                    <td>{formatINR(trip.revenue)}</td>
                     <td>
                       <Badge
                         variant={
@@ -573,7 +574,7 @@ export const SmartDispatchPage: React.FC = () => {
               onChange={e => setFinalOdometer(Number(e.target.value))}
             />
             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              Start odometer was {completingTrip?.startOdometer.toLocaleString()} km
+              Start odometer was {completingTrip ? formatNumber(completingTrip.startOdometer) : '—'} km
             </div>
           </div>
 

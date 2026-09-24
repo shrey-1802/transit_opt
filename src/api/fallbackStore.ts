@@ -634,7 +634,7 @@ export const fallbackStore = {
       }
       if (!capacitySufficient) {
         errors.push(
-          `Cargo overload: Payload (${data.cargoWeightKg.toLocaleString()} kg) exceeds vehicle max capacity (${maxCapacityKg.toLocaleString()} kg) by ${(data.cargoWeightKg - maxCapacityKg).toLocaleString()} kg.`
+          `Cargo overload: Payload (${data.cargoWeightKg.toLocaleString('en-IN')} kg) exceeds vehicle max capacity (${maxCapacityKg.toLocaleString('en-IN')} kg) by ${(data.cargoWeightKg - maxCapacityKg).toLocaleString('en-IN')} kg.`
         );
       }
     }
@@ -966,7 +966,7 @@ export const fallbackStore = {
         return {
           intent,
           title: 'Top Performing Asset by ROI',
-          summary: `Vehicle ${topVehicle.registrationNumber} (${topVehicle.model}) leads the fleet with an estimated 34.2% annualized ROI, generating $68,400 net margin against an acquisition cost of $165,000.`,
+          summary: `Vehicle ${topVehicle.registrationNumber} (${topVehicle.model}) leads the fleet with an estimated 34.2% annualized ROI, generating ₹${(68400).toLocaleString('en-IN')} net margin against an acquisition cost of ₹${(165000).toLocaleString('en-IN')}.`,
           generatedAt: now,
           data: [
             { registration: topVehicle.registrationNumber, model: topVehicle.model, roi: '34.2%', fuelEfficiency: '3.4 km/L', status: topVehicle.status }
@@ -1006,7 +1006,7 @@ export const fallbackStore = {
           data: inShop.map(v => ({
             registration: v.registrationNumber,
             model: v.model,
-            odometer: `${v.odometer.toLocaleString()} km`,
+            odometer: `${v.odometer.toLocaleString('en-IN')} km`,
             shopStatus: 'In Shop (Locked)'
           })),
           suggestedAction: {

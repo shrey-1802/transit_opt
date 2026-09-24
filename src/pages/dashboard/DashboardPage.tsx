@@ -23,6 +23,7 @@ import { dispatchService } from '../../api/dispatchService';
 import { DashboardKPIs, RoiTrendPoint, FuelWeeklyTrendPoint, MaintenanceCostTrendPoint } from '../../types/analytics';
 import { Alert } from '../../types/alert';
 import { Trip } from '../../types/trip';
+import { formatNumber, formatINR } from '../../utils/formatters';
 
 export const DashboardPage: React.FC = () => {
   const [kpis, setKpis] = useState<DashboardKPIs | null>(null);
@@ -247,7 +248,7 @@ export const DashboardPage: React.FC = () => {
                         opacity: 0.85 + (i * 0.03),
                         transition: 'height 0.4s ease',
                       }}
-                      title={`Revenue: $${pt.revenue.toLocaleString()} | Cost: $${pt.operationalCost.toLocaleString()}`}
+                      title={`Revenue: ${formatINR(pt.revenue)} | Cost: ${formatINR(pt.operationalCost)}`}
                     />
                     <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
                       {pt.month}
@@ -259,7 +260,7 @@ export const DashboardPage: React.FC = () => {
             <div style={{ display: 'flex', justifyContent: 'space-around', borderTop: '1px solid var(--border-subtle)', marginTop: '0.85rem', paddingTop: '0.85rem' }}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Avg Fleet Margin</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>+$37,416 / mo</div>
+                <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>+{formatINR(37416)} / mo</div>
               </div>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Annualized ROI</div>
@@ -370,7 +371,7 @@ export const DashboardPage: React.FC = () => {
                         <span style={{ fontWeight: 600, color: 'var(--color-olive-700)' }}>{trip.vehicleReg}</span>
                       </td>
                       <td>{trip.driverName}</td>
-                      <td>{trip.cargoWeightKg.toLocaleString()} kg</td>
+                      <td>{formatNumber(trip.cargoWeightKg)} kg</td>
                       <td>
                         <Badge variant="ontrip">{trip.status}</Badge>
                       </td>
@@ -403,12 +404,12 @@ export const DashboardPage: React.FC = () => {
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '0.85rem' }}>{item.week}</div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    {item.liters.toLocaleString()} Liters consumed
+                    {formatNumber(item.liters)} Liters consumed
                   </div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--text-primary)' }}>
-                    ${item.fuelCost.toLocaleString()}
+                    {formatINR(item.fuelCost)}
                   </div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--color-olive-700)', fontWeight: 600 }}>
                     {item.averageKmPerL} km/L avg

@@ -17,6 +17,7 @@ import { Badge } from '../../components/common/Badge';
 import { Drawer } from '../../components/common/Drawer';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { formatNumber, formatINR } from '../../utils/formatters';
 
 export const VehicleRegistryPage: React.FC = () => {
   const { can } = useAuth();
@@ -326,13 +327,13 @@ export const VehicleRegistryPage: React.FC = () => {
                     <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{v.type}</span>
                   </td>
                   <td>
-                    <span style={{ fontWeight: 600 }}>{v.maxLoadCapacity.toLocaleString()} kg</span>
+                    <span style={{ fontWeight: 600 }}>{formatNumber(v.maxLoadCapacity)} kg</span>
                   </td>
                   <td>
-                    <span style={{ fontFeatureSettings: '"tnum"' }}>{v.odometer.toLocaleString()} km</span>
+                    <span style={{ fontFeatureSettings: '"tnum"' }}>{formatNumber(v.odometer)} km</span>
                   </td>
                   <td>
-                    <span style={{ fontFeatureSettings: '"tnum"' }}>${v.acquisitionCost.toLocaleString()}</span>
+                    <span style={{ fontFeatureSettings: '"tnum"' }}>{formatINR(v.acquisitionCost)}</span>
                   </td>
                   <td>
                     <Badge variant={getStatusBadgeVariant(v.status)}>{v.status}</Badge>
@@ -460,7 +461,7 @@ export const VehicleRegistryPage: React.FC = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="form-group">
-              <label className="form-label">Acquisition Cost ($)</label>
+              <label className="form-label">Acquisition Cost (₹)</label>
               <input
                 type="number"
                 className="form-control"

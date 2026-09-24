@@ -5,7 +5,7 @@ import {
   ArrowLeft,
   Calendar,
   Gauge,
-  DollarSign,
+  IndianRupee,
   TrendingUp,
   FileText,
   Upload,
@@ -21,6 +21,7 @@ import { vehiclesService } from '../../api/vehiclesService';
 import { VehicleDigitalTwinData, VehicleLifecycleState } from '../../types/vehicle';
 import { Badge } from '../../components/common/Badge';
 import { useToast } from '../../context/ToastContext';
+import { formatNumber, formatINR, formatINRCurrency } from '../../utils/formatters';
 
 export const VehicleTwinPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -259,15 +260,15 @@ export const VehicleTwinPage: React.FC = () => {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-subtle)' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Max Payload Capacity</span>
-                <span style={{ fontWeight: 700 }}>{vehicle.maxLoadCapacity.toLocaleString()} kg</span>
+                <span style={{ fontWeight: 700 }}>{formatNumber(vehicle.maxLoadCapacity)} kg</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-subtle)' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Current Odometer</span>
-                <span style={{ fontWeight: 700 }}>{vehicle.odometer.toLocaleString()} km</span>
+                <span style={{ fontWeight: 700 }}>{formatNumber(vehicle.odometer)} km</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-subtle)' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Acquisition Cost</span>
-                <span style={{ fontWeight: 700 }}>${vehicle.acquisitionCost.toLocaleString()}</span>
+                <span style={{ fontWeight: 700 }}>{formatINR(vehicle.acquisitionCost)}</span>
               </div>
             </div>
           </div>
@@ -296,8 +297,8 @@ export const VehicleTwinPage: React.FC = () => {
                   <div style={{ width: `${twinData.serviceProgressPercent}%`, height: '100%', backgroundColor: twinData.serviceProgressPercent > 80 ? '#C47828' : 'var(--color-olive-600)' }} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
-                  <span>Last: {vehicle.lastServiceOdometer.toLocaleString()} km</span>
-                  <span>Target: {twinData.nextServiceOdometer.toLocaleString()} km</span>
+                  <span>Last: {formatNumber(vehicle.lastServiceOdometer)} km</span>
+                  <span>Target: {formatNumber(twinData.nextServiceOdometer)} km</span>
                 </div>
               </div>
 
@@ -347,8 +348,8 @@ export const VehicleTwinPage: React.FC = () => {
                       <td style={{ fontWeight: 700 }}>{trip.tripCode}</td>
                       <td>{trip.source} → {trip.destination}</td>
                       <td>{trip.driverName}</td>
-                      <td>{trip.cargoWeightKg.toLocaleString()} kg</td>
-                      <td>${trip.revenue.toLocaleString()}</td>
+                      <td>{formatNumber(trip.cargoWeightKg)} kg</td>
+                      <td>{formatINR(trip.revenue)}</td>
                       <td><Badge variant={trip.status === 'Completed' ? 'available' : 'ontrip'}>{trip.status}</Badge></td>
                     </tr>
                   ))
@@ -390,9 +391,9 @@ export const VehicleTwinPage: React.FC = () => {
                     <tr key={f.id}>
                       <td>{f.date}</td>
                       <td>{f.stationName}</td>
-                      <td>{f.liters} L</td>
-                      <td>${f.totalCost.toFixed(2)}</td>
-                      <td>{f.odometer.toLocaleString()} km</td>
+                      <td>{formatNumber(f.liters)} L</td>
+                      <td>{formatINRCurrency(f.totalCost)}</td>
+                      <td>{formatNumber(f.odometer)} km</td>
                       <td>{f.fuelEfficiencyKmPerL} km/L</td>
                       <td>
                         {f.isAbnormalConsumption ? (
@@ -441,7 +442,7 @@ export const VehicleTwinPage: React.FC = () => {
                       <td style={{ fontWeight: 600 }}>{m.type}</td>
                       <td>{m.technicianOrShop}</td>
                       <td>{m.startDate.split('T')[0]}</td>
-                      <td>${m.cost.toLocaleString()}</td>
+                      <td>{formatINR(m.cost)}</td>
                       <td><Badge variant={m.priority === 'High' ? 'warning' : 'olive'}>{m.priority}</Badge></td>
                       <td><Badge variant={m.status === 'Completed' ? 'available' : 'inshop'}>{m.status}</Badge></td>
                     </tr>
@@ -468,21 +469,21 @@ export const VehicleTwinPage: React.FC = () => {
               <div style={{ padding: '1rem', backgroundColor: 'var(--bg-surface-hover)', borderRadius: 'var(--radius-md)' }}>
                 <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Lifetime Revenue</div>
                 <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '0.25rem' }}>
-                  ${twinData.totalRevenue.toLocaleString()}
+                  {formatINR(twinData.totalRevenue)}
                 </div>
               </div>
 
               <div style={{ padding: '1rem', backgroundColor: 'var(--bg-surface-hover)', borderRadius: 'var(--radius-md)' }}>
                 <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Operating Expenses (Fuel + Maint)</div>
                 <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--status-critical-text)', marginTop: '0.25rem' }}>
-                  ${(twinData.totalFuelCost + twinData.totalMaintenanceCost).toLocaleString()}
+                  {formatINR(twinData.totalFuelCost + twinData.totalMaintenanceCost)}
                 </div>
               </div>
 
               <div style={{ padding: '1rem', backgroundColor: 'var(--bg-surface-hover)', borderRadius: 'var(--radius-md)' }}>
                 <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Net Operational Margin</div>
                 <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-olive-700)', marginTop: '0.25rem' }}>
-                  ${twinData.netProfit.toLocaleString()}
+                  {formatINR(twinData.netProfit)}
                 </div>
               </div>
 

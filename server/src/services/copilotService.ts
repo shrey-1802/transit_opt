@@ -23,7 +23,7 @@ export const copilotService = {
         return {
           intent,
           title: 'Top Performing Asset by ROI',
-          summary: `Vehicle ${top.registrationNumber} (${top.model}) leads the fleet with ${top.roiPercentage}% annualized ROI, generating $${top.revenue.toLocaleString()} revenue against an acquisition cost of $${top.acquisitionCost.toLocaleString()}.`,
+          summary: `Vehicle ${top.registrationNumber} (${top.model}) leads the fleet with ${top.roiPercentage}% annualized ROI, generating ₹${top.revenue.toLocaleString('en-IN')} revenue against an acquisition cost of ₹${top.acquisitionCost.toLocaleString('en-IN')}.`,
           generatedAt: now,
           data: [
             {
@@ -31,8 +31,8 @@ export const copilotService = {
               model: top.model,
               type: top.type,
               roi: `${top.roiPercentage}%`,
-              grossRevenue: `$${top.revenue.toLocaleString()}`,
-              operatingCost: `$${top.totalCost.toLocaleString()}`,
+              grossRevenue: `₹${top.revenue.toLocaleString('en-IN')}`,
+              operatingCost: `₹${top.totalCost.toLocaleString('en-IN')}`,
             },
           ],
           suggestedAction: {
@@ -86,9 +86,9 @@ export const copilotService = {
           data: inShop.map(v => ({
             registration: v.registrationNumber,
             model: v.model,
-            odometer: `${v.odometer.toLocaleString()} km`,
+            odometer: `${v.odometer.toLocaleString('en-IN')} km`,
             activeWorkOrder: v.maintenanceLogs[0]?.type || 'Shop Bay Service',
-            estimatedCost: `$${(v.maintenanceLogs[0]?.cost || 0).toLocaleString()}`,
+            estimatedCost: `₹${(v.maintenanceLogs[0]?.cost || 0).toLocaleString('en-IN')}`,
           })),
           suggestedAction: {
             label: 'View Maintenance Work Orders',

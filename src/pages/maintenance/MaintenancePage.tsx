@@ -6,7 +6,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   Calendar,
-  DollarSign,
+  IndianRupee,
   Truck,
   Check
 } from 'lucide-react';
@@ -18,6 +18,7 @@ import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { formatNumber, formatINR } from '../../utils/formatters';
 
 export const MaintenancePage: React.FC = () => {
   const { can } = useAuth();
@@ -149,7 +150,7 @@ export const MaintenancePage: React.FC = () => {
                 </div>
 
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '0.65rem' }}>
-                  {v.model} • Odo: {v.odometer.toLocaleString()} km
+                  {v.model} • Odo: {formatNumber(v.odometer)} km
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', marginBottom: '0.25rem' }}>
@@ -170,8 +171,8 @@ export const MaintenancePage: React.FC = () => {
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
-                  <span>Last: {v.lastServiceOdometer.toLocaleString()} km</span>
-                  <span>Next: {nextOdometer.toLocaleString()} km</span>
+                  <span>Last: {formatNumber(v.lastServiceOdometer)} km</span>
+                  <span>Next: {formatNumber(nextOdometer)} km</span>
                 </div>
               </div>
             );
@@ -217,7 +218,7 @@ export const MaintenancePage: React.FC = () => {
                     <td>
                       <div style={{ fontWeight: 700, color: 'var(--color-olive-700)' }}>{rec.vehicleReg}</div>
                       <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                        Odo @ Service: {rec.odometerAtService.toLocaleString()} km
+                        Odo @ Service: {formatNumber(rec.odometerAtService)} km
                       </div>
                     </td>
                     <td>
@@ -233,7 +234,7 @@ export const MaintenancePage: React.FC = () => {
                     </td>
                     <td>{rec.technicianOrShop}</td>
                     <td>{rec.startDate.split('T')[0]}</td>
-                    <td style={{ fontWeight: 700 }}>${rec.cost.toLocaleString()}</td>
+                    <td style={{ fontWeight: 700 }}>{formatINR(rec.cost)}</td>
                     <td>
                       <Badge variant={rec.status === 'Completed' ? 'available' : 'inshop'}>{rec.status}</Badge>
                     </td>
@@ -308,7 +309,7 @@ export const MaintenancePage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Estimated Cost ($)</label>
+              <label className="form-label">Estimated Cost (₹)</label>
               <input
                 type="number"
                 className="form-control"

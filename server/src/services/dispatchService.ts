@@ -40,7 +40,7 @@ export const dispatchService = {
       }
       if (!capacitySufficient) {
         errors.push(
-          `Cargo overload attempt: Payload (${data.cargoWeightKg.toLocaleString()} kg) exceeds vehicle max capacity (${maxCapacityKg.toLocaleString()} kg) by ${(data.cargoWeightKg - maxCapacityKg).toLocaleString()} kg.`
+          `Cargo overload attempt: Payload (${data.cargoWeightKg.toLocaleString('en-IN')} kg) exceeds vehicle max capacity (${maxCapacityKg.toLocaleString('en-IN')} kg) by ${(data.cargoWeightKg - maxCapacityKg).toLocaleString('en-IN')} kg.`
         );
       }
     }

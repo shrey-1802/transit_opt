@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Fuel,
-  DollarSign,
+  IndianRupee,
   Plus,
   Receipt,
   TrendingDown,
@@ -17,6 +17,7 @@ import { Modal } from '../../components/common/Modal';
 import { MetricCard } from '../../components/common/MetricCard';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { formatNumber, formatINR, formatINRCurrency } from '../../utils/formatters';
 
 export const FuelExpensesPage: React.FC = () => {
   const { can } = useAuth();
@@ -120,7 +121,7 @@ export const FuelExpensesPage: React.FC = () => {
       showToast({
         type: 'success',
         title: 'Expense Recorded',
-        message: `$${expenseForm.amount} booked under ${expenseForm.category}.`,
+        message: `₹${expenseForm.amount} booked under ${expenseForm.category}.`,
       });
 
       setIsExpenseModalOpen(false);
@@ -157,21 +158,21 @@ export const FuelExpensesPage: React.FC = () => {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
         <MetricCard
           title="Total Operating Cost"
-          value={costSummary ? `$${costSummary.totalOperationalCost.toLocaleString()}` : '—'}
+          value={costSummary ? formatINR(costSummary.totalOperationalCost) : '—'}
           subtitle="Fuel + Maintenance + Tolls"
-          icon={DollarSign}
+          icon={IndianRupee}
         />
 
         <MetricCard
           title="Total Fuel Expenditure"
-          value={costSummary ? `$${costSummary.fuelCost.toLocaleString()}` : '—'}
+          value={costSummary ? formatINR(costSummary.fuelCost) : '—'}
           subtitle="Direct diesel outlays"
           icon={Fuel}
         />
 
         <MetricCard
           title="Maintenance Expenditure"
-          value={costSummary ? `$${costSummary.maintenanceCost.toLocaleString()}` : '—'}
+          value={costSummary ? formatINR(costSummary.maintenanceCost) : '—'}
           subtitle="Workshop repairs & parts"
           icon={Receipt}
         />
@@ -248,10 +249,10 @@ export const FuelExpensesPage: React.FC = () => {
                       <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{log.stationName}</div>
                     </td>
                     <td>{log.date}</td>
-                    <td style={{ fontWeight: 600 }}>{log.liters} L</td>
-                    <td>${log.costPerLiter.toFixed(2)}</td>
-                    <td style={{ fontWeight: 700 }}>${log.totalCost.toFixed(2)}</td>
-                    <td>{log.distanceSinceLastFill} km</td>
+                    <td style={{ fontWeight: 600 }}>{formatNumber(log.liters)} L</td>
+                    <td>{formatINRCurrency(log.costPerLiter)}</td>
+                    <td style={{ fontWeight: 700 }}>{formatINRCurrency(log.totalCost)}</td>
+                    <td>{formatNumber(log.distanceSinceLastFill)} km</td>
                     <td>
                       <span style={{ fontWeight: 700, color: log.isAbnormalConsumption ? 'var(--status-critical-text)' : 'var(--text-primary)' }}>
                         {log.fuelEfficiencyKmPerL} km/L
@@ -303,7 +304,7 @@ export const FuelExpensesPage: React.FC = () => {
                     </td>
                     <td style={{ fontWeight: 600 }}>{exp.description}</td>
                     <td>{exp.vehicleReg || 'Fleet-wide'}</td>
-                    <td style={{ fontWeight: 700 }}>${exp.amount.toFixed(2)}</td>
+                    <td style={{ fontWeight: 700 }}>{formatINRCurrency(exp.amount)}</td>
                     <td style={{ fontFeatureSettings: '"tnum"', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                       {exp.receiptNumber || '—'}
                     </td>
@@ -356,7 +357,7 @@ export const FuelExpensesPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Cost Per Liter ($) *</label>
+              <label className="form-label">Cost Per Liter (₹) *</label>
               <input
                 type="number"
                 step="0.01"
@@ -427,7 +428,7 @@ export const FuelExpensesPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Amount ($) *</label>
+              <label className="form-label">Amount (₹) *</label>
               <input
                 type="number"
                 step="0.01"

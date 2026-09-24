@@ -4,7 +4,7 @@ import {
   Download,
   Printer,
   TrendingUp,
-  DollarSign,
+  IndianRupee,
   Percent,
   Truck,
   Filter,
@@ -15,6 +15,7 @@ import { VehicleRoiRanking, DashboardKPIs } from '../../types/analytics';
 import { Badge } from '../../components/common/Badge';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { formatINR } from '../../utils/formatters';
 
 export const ReportsPage: React.FC = () => {
   const { can } = useAuth();
@@ -186,13 +187,13 @@ export const ReportsPage: React.FC = () => {
                     <td style={{ fontWeight: 600 }}>{item.model}</td>
                     <td>{item.type}</td>
                     <td style={{ fontWeight: 600, color: 'var(--color-olive-700)' }}>
-                      ${item.revenue.toLocaleString()}
+                      {formatINR(item.revenue)}
                     </td>
                     <td style={{ color: 'var(--status-critical-text)' }}>
-                      ${item.totalCost.toLocaleString()}
+                      {formatINR(item.totalCost)}
                     </td>
-                    <td style={{ fontWeight: 700 }}>${netMargin.toLocaleString()}</td>
-                    <td>${item.acquisitionCost.toLocaleString()}</td>
+                    <td style={{ fontWeight: 700 }}>{formatINR(netMargin)}</td>
+                    <td>{formatINR(item.acquisitionCost)}</td>
                     <td>
                       {item.roiPercentage !== null ? (
                         <span

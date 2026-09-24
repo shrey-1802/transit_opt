@@ -55,7 +55,7 @@ export const maintenanceService = {
           type: 'vehicle_service_due',
           severity: 'warning',
           title: `Vehicle In Shop: ${vehicle.registrationNumber}`,
-          description: `Work order opened: ${data.type} ($${(data.cost || 0).toLocaleString()}). Asset locked in workshop.`,
+          description: `Work order opened: ${data.type} (₹${(data.cost || 0).toLocaleString('en-IN')}). Asset locked in workshop.`,
           relatedEntityType: 'vehicle',
           relatedEntityId: vehicle.id,
           actionUrl: '/maintenance',
